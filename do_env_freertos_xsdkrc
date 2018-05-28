@@ -1,0 +1,3 @@
+export TARGET_ARCH=ARM_FREERTOS
+export FREERTOS_INCLUDE_PATH=-I/home/tbesemer/src/production_rel1_0525a/opat_os/freertos823_xilinx_bsp_1/ps7_cortexa9_1/include
+export FREERTOS_CROSS_PREFIX=arm-none-eabi-

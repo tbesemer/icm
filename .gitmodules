@@ -1,0 +1,3 @@
+[submodule "port/FreeRTOS/FreeRTOS-Sim"]
+	path = port/FreeRTOS/FreeRTOS-Sim
+	url = git@github.com:tbesemer/FreeRTOS-Sim.git
