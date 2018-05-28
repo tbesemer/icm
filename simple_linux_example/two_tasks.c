@@ -59,10 +59,33 @@ ICM_HANDLER hId = (ICM_HANDLER)(long)v1;
     for( ;; ) {
         icmMsg = icmMsgWait( hId, &err );
         if( !icmMsg ) {
-            icmLog( ICM_LOG_ALWAYS, "myTestTask1(): Back from icmMsgWait(), icmMsg NULL, err = %d\n", err );
+            icmLog( ICM_LOG_ALWAYS,
+		"myTestTask1(): Back from icmMsgWait(), icmMsg NULL, err = %d\n", err );
         } else {
-            icmLog( ICM_LOG_ALWAYS, "myTestTask1(): Back from icmMsgWait(), icmMsg->mainEvent = %d\n", icmMsg->mainEvent );
+            icmLog( ICM_LOG_ALWAYS,
+		"myTestTask1(): Back from icmMsgWait(), icmMsg->mainEvent = %d\n",
+				icmMsg->mainEvent );
         }
+
+	/* Process based on mainEvent.
+         */
+	switch( icmMsg->mainEvent ) {
+	    case TEST_ICM_MAIN_20:
+                icmLog( ICM_LOG_ALWAYS, "myTestTask1(): Handling TEST_ICM_MAIN_20\n" );
+		break;
+
+	    default:
+                icmLog( ICM_LOG_ALWAYS, "myTestTask1(): Unknown mainEvent %d\n", icmMsg->mainEvent );
+		break;
+	}
+
+	/*  Free the Event Notice.  After all subscribers have received and completed
+	 *  processing the Event Notice, it is released to the Free Pool.
+ 	 */
+	icmFreeEvent( icmMsg, &err );
+	if( err ) {
+            icmLog( ICM_LOG_ALWAYS, "myTestTask1(): icmFreeEvent() FAILED, %d\n", err );
+	}
     }
     
     return( NULL );
@@ -117,10 +140,37 @@ ICM_HANDLER hId = (ICM_HANDLER)(long)v1;
     for( ;; ) {
         icmMsg = icmMsgWait( hId, &err );
         if( !icmMsg ) {
-            icmLog( ICM_LOG_ALWAYS, "myTestTask2(): Back from icmMsgWait(), icmMsg NULL\n" );
+            icmLog( ICM_LOG_ALWAYS,
+		"myTestTask2(): Back from icmMsgWait(), icmMsg NULL\n" );
         } else {
-            icmLog( ICM_LOG_ALWAYS, "myTestTask2(): Back from icmMsgWait(), icmMsg->mainEvent = %d\n", icmMsg->mainEvent );
+            icmLog( ICM_LOG_ALWAYS,
+		"myTestTask2(): Back from icmMsgWait(), icmMsg->mainEvent = %d\n",
+				icmMsg->mainEvent );
         }
+
+	/* Process based on mainEvent.
+         */
+	switch( icmMsg->mainEvent ) {
+	    case TEST_ICM_MAIN_10:
+                icmLog( ICM_LOG_ALWAYS, "myTestTask2(): Handling TEST_ICM_MAIN_10\n" );
+		break;
+
+	    case TEST_ICM_MAIN_20:
+                icmLog( ICM_LOG_ALWAYS, "myTestTask2(): Handling TEST_ICM_MAIN_20\n" );
+		break;
+
+	    default:
+                icmLog( ICM_LOG_ALWAYS, "myTestTask2(): Unknown mainEvent %d\n", icmMsg->mainEvent );
+		break;
+	}
+
+	/*  Free the Event Notice.  After all subscribers have received and completed
+	 *  processing the Event Notice, it is released to the Free Pool.
+ 	 */
+	icmFreeEvent( icmMsg, &err );
+	if( err ) {
+            icmLog( ICM_LOG_ALWAYS, "myTestTask1(): icmFreeEvent() FAILED, %d\n", err );
+	}
     }
 
     return( NULL );
@@ -152,11 +202,6 @@ ICM_MSG *icmMsg;
 	exit( 1 );
     }
 
-    sleep( 1 );
-    icmMsg = icmAllocEvent( ICM_TEST_EVENT_SIZE, &err );
-    icmMsg->mainEvent = 20;
-    icmDispatch( icmMsg, &err );
-
     /*  Under POSIX Linux, using pthread()'s, this call returns.  Thus, for test
      *  case, we continue to run as parent main().  Under FreeRTOS, this call
      *  never returns, normal tasking starts up.
@@ -174,7 +219,7 @@ ICM_MSG *icmMsg;
     	    icmLog( ICM_LOG_ALWAYS, "main(): icmAllocEvent() FAILED, err = %d\n", err );
 	    exit( 1 );
 	} else {
-	    if( (cnt & 0x01) ) {
+	    if( (cnt++ & 0x01) == 0x01 ) {
                 icmMsg->mainEvent = TEST_ICM_MAIN_20;
 	    } else {
                 icmMsg->mainEvent = TEST_ICM_MAIN_10;
@@ -187,9 +232,20 @@ ICM_MSG *icmMsg;
     	        icmLog( ICM_LOG_ALWAYS, "main(): icmDistpach() FAILED, err = %d\n", err );
 		exit( 1 );
 	    }
+
+	    /*  Free the Event Notice.  After all subscribers have received and completed
+	     *  processing the Event Notice, it is released to the Free Pool.
+	     *
+	     *  Note that since we allocated it, we own it as well; we need to free it -
+	     *  everybody that handles the Event Notice pointer must free it.  Convention.
+ 	     */
+	    icmFreeEvent( icmMsg, &err );
+	    if( err ) {
+                icmLog( ICM_LOG_ALWAYS, "main(): icmFreeEvent() FAILED, %d\n", err );
+	    }
 	}
 
 	icmLog( ICM_LOG_ALWAYS, "main(): Sleeping for 2 seconds\n" );
-	sleep( 2 );
+	sleep( 1 );
     }
 }

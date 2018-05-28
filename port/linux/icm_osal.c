@@ -3,6 +3,7 @@
 #include        <stdarg.h>
 #include        <strings.h>
 #include        <stdlib.h>
+#include        <unistd.h>
 #include        <pthread.h>
 #include        <semaphore.h>
 #include        <icm_pub.h>
@@ -46,7 +47,8 @@ int icmOsInit()
 
 int icmOsStart()
 {
-    fprintf( stdout, "icmOsStart(): Doing Nothing()\n" );
+    fprintf( stdout, "icmOsStart(): Doing Nothing, but sleep(1) to allows threads to run\n" );
+    sleep( 1 );
     return( 1 );
 }
 

@@ -5,4 +5,5 @@
 port/FreeRTOS/FreeRTOS_x86/freertos_test
 test/fp_test
 test/task_test
+simple_linux_example/two_tasks
 

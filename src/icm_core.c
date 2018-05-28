@@ -171,6 +171,8 @@ ICM_OS_TASK_CTL  *taskCtlPtr;
     }
     icmUnlockDispatch();
 
+    *err = ICM_NO_ERR;
+
 }
 
 ICM_MSG *icmMsgWait( ICM_HANDLER hId, int *err )
