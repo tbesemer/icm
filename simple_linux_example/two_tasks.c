@@ -5,10 +5,14 @@
 #include        <icm_pub.h>
 #include        <icm_private.h>
 
-/* Size of Event Body (payload).
+/* Size of Event Body (payload) in demo.
  */
 #define	ICM_TEST_EVENT_SIZE	200
 
+/*  Main Events used in Demo; normally, these are defined in a global
+ *  header file such as <sys_events.h>, as the subscriber model is
+ *  consistent, and all ICM Tasks use Event Notices and Main Event Numbers.
+ */ 
 typedef enum {
 
     TEST_ICM_MAIN_10 = 10,
@@ -227,6 +231,9 @@ ICM_MSG *icmMsg;
 
 	    icmMsg->subEvent = cnt;
 
+	    /*  Dispatch the Event Notice; all subscribors who have signed up for this
+	     *  mainEvent will receive it.
+	     */
             icmDispatch( icmMsg, &err );
 	    if( err ) {
     	        icmLog( ICM_LOG_ALWAYS, "main(): icmDistpach() FAILED, err = %d\n", err );

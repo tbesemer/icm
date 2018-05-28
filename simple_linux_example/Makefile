@@ -22,7 +22,7 @@ endif
 all: icm_base two_tasks
 
 .PHONY: two_tasks
-two_tasks: 
+two_tasks:  two_tasks.c Makefile
 	$(CROSS_CC) -L ${ICM_LIB_DIR} ${CFLAGS} -o two_tasks  two_tasks.c  ${ICM_LIBS} -lpthread
 
 .PHONY: icm_base
