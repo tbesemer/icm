@@ -35,8 +35,11 @@ export CROSS_RANLIB := ${FREERTOS_CROSS_PREFIX}ranlib
 
 CFLAGS := -I${ICM_INCLUDE_DIR} -I${ICM_SRC_DIR} -Wall
 
-.PHONY: all 
-all: ${ICM_OBJ_DIR}/icm_core.o ${ICM_OBJ_DIR}/icm_pool.o ${ICM_OBJ_DIR}/icm_log.o ${ICM_OBJ_DIR}/icm_config.o  osal
+.PHONY: all
+all: icm_submodule icm_core
+
+.PHONY: icm_core 
+icm_core: ${ICM_OBJ_DIR}/icm_core.o ${ICM_OBJ_DIR}/icm_pool.o ${ICM_OBJ_DIR}/icm_log.o ${ICM_OBJ_DIR}/icm_config.o  osal
 	${CROSS_AR} -rvs ${ICM_LIB_DIR}/libicmlib.a ${ICM_OBJ_DIR}/icm_core.o ${ICM_OBJ_DIR}/icm_pool.o ${ICM_OBJ_DIR}/icm_log.o ${ICM_OBJ_DIR}/icm_config.o 
 	${CROSS_RANLIB} ${ICM_LIB_DIR}/libicmlib.a 
 
@@ -59,6 +62,17 @@ ${ICM_OBJ_DIR}/icm_config.o: ${ICM_CONF_DIR}/icm_config.c ${ICM_SRC_DIR}/icm_pri
 .PHONY: osal
 osal:
 	make -C ${ICM_PORT_DIR} ${ICM_PORT_CMD}
+
+.PHONY: icm_submodule
+icm_submodule:
+	@ if [ ! -f .icm_submodule ]; \
+          then \
+	      git submodule init; \
+	      git submodule update; \
+              touch .icm_submodule; \
+          else \
+              echo "icm_submodule: Already Initialized, Skipping";\
+          fi;
 
 clean:
 	rm -f ${ICM_OBJ_DIR}/* ${ICM_LIB_DIR}/*
