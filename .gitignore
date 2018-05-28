@@ -2,4 +2,7 @@
 *.tar
 *.elf
 .icm_submodule
+port/FreeRTOS/FreeRTOS_x86/freertos_test
+test/fp_test
+test/task_test
 

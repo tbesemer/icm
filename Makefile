@@ -43,8 +43,8 @@ icm_core: ${ICM_OBJ_DIR}/icm_core.o ${ICM_OBJ_DIR}/icm_pool.o ${ICM_OBJ_DIR}/icm
 	${CROSS_AR} -rvs ${ICM_LIB_DIR}/libicmlib.a ${ICM_OBJ_DIR}/icm_core.o ${ICM_OBJ_DIR}/icm_pool.o ${ICM_OBJ_DIR}/icm_log.o ${ICM_OBJ_DIR}/icm_config.o 
 	${CROSS_RANLIB} ${ICM_LIB_DIR}/libicmlib.a 
 
-.PHONY: test_code
-test_code:
+.PHONY: icm_test
+icm_test:
 	make -C ${ICM_TEST_DIR}
 	
 ${ICM_OBJ_DIR}/icm_core.o: ${ICM_SRC_DIR}/icm_core.c ${ICM_SRC_DIR}/icm_private.h ${ICM_INCLUDE_DIR}/icm_pub.h
