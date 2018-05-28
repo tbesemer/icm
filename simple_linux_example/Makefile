@@ -18,8 +18,8 @@ else
 $(error "TARGET_ARCH not set to X86_LINUX, source ../do_env_posix_linuxrc")
 endif
 
-.PHONY: icm_base all
-all: two_tasks
+.PHONY: all
+all: icm_base two_tasks
 
 .PHONY: two_tasks
 two_tasks: 
