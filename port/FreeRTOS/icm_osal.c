@@ -239,16 +239,25 @@ int          tmpTail;
     return( icmMsg );
 }
 
+void icmOsLockScheduler()
+{
+    vTaskSuspendAll();
+}
 
+void icmOsUnlockScheduler()
+{
+
+    xTaskResumeAll();
+}
+
+#ifdef __GCC_POSIX__
 void vApplicationIdleHook( void )
 {
-#ifdef __GCC_POSIX__
 	struct timespec xTimeToSleep, xTimeSlept;
 		/* Makes the process more agreeable when using the Posix simulator. */
 		xTimeToSleep.tv_sec = 1;
 		xTimeToSleep.tv_nsec = 0;
 		nanosleep( &xTimeToSleep, &xTimeSlept );
-#endif
 }
 
 void vAssertCalled( unsigned long ulLine, const char * const pcFileName )
@@ -286,4 +295,4 @@ void vApplicationMallocFailedHook( void )
         provide information on how the remaining heap might be fragmented). */
         vAssertCalled( __LINE__, __FILE__ );
 }
-
+#endif

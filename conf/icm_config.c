@@ -11,8 +11,8 @@
 ICM_FP_CONFIG fpConfig[ ICM_MAX_FREE_POOL ] = {
 
    /* Size   Count */
-   {    512,   512   },
-   {   2048,     8   },
+   {    256,   10   },
+   {    512,    2   },
 
 };
 

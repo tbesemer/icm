@@ -15,7 +15,11 @@ CROSS_RANLIB ?= ranlib
 
 FREERTOS_INCLUDE_PATH ?= -I${FREE_RTOS_ROOT} -I${FREE_RTOS_KERNEL}/include -I${FREE_RTOS_KERNEL}/portable/GCC/POSIX -I${FREE_RTOS_BASE}
 
+ifeq ($(ARCH),arm)
+CFLAGS ?= -mcpu=cortex-a9 -mfloat-abi=hard -mfpu=vfpv3 -I${ICM_INCLUDE_DIR} -I${ICM_SRC_DIR} ${FREERTOS_INCLUDE_PATH} -Wall
+else
 CFLAGS ?= -D__GCC_POSIX__ -I${ICM_INCLUDE_DIR} -I${ICM_SRC_DIR} ${FREERTOS_INCLUDE_PATH} -Wall
+endif
 
 .PHONY: all
 all:	icmosal_x86

@@ -93,6 +93,7 @@ ICM_OS_TASK_CTL  *taskCtlPtr;
     /* Allocate an empty Task Control Block.
      */
     icmLockWorkspace();
+    icmOsLockScheduler();
     for( taskCtlIndex = 0; taskCtlIndex < ICM_MAX_TASKS; taskCtlIndex++ ) {
 	if( !icmWkspc->taskCtl[ taskCtlIndex ].inUse ) {
 	    taskCtlPtr = &icmWkspc->taskCtl[ taskCtlIndex ];
@@ -126,6 +127,7 @@ ICM_OS_TASK_CTL  *taskCtlPtr;
 	icmErrorLog( "icmOpenHandler(): FAIL, icmOsQueueCreate() failed\n" );
     }
 
+    icmOsUnlockScheduler();
     icmUnlockWorkspace();
 
     /*  Task Control Index is always (index + 1) to help ensure

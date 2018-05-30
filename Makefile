@@ -33,7 +33,11 @@ export CROSS_CC := ${FREERTOS_CROSS_PREFIX}gcc
 export CROSS_AR := ${FREERTOS_CROSS_PREFIX}ar
 export CROSS_RANLIB := ${FREERTOS_CROSS_PREFIX}ranlib
 
+ifeq ($(ARCH),arm)
+CFLAGS := -mcpu=cortex-a9 -mfloat-abi=hard -mfpu=vfpv3 -I${ICM_INCLUDE_DIR} -I${ICM_SRC_DIR} -Wall
+else
 CFLAGS := -I${ICM_INCLUDE_DIR} -I${ICM_SRC_DIR} -Wall
+endif
 
 .PHONY: all
 all: icm_submodule icm_core

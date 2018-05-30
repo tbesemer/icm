@@ -227,3 +227,11 @@ int          tmpTail;
 
     return( icmMsg );
 }
+
+void icmOsLockScheduler()
+{
+}
+
+void icmOsUnlockScheduler()
+{
+}

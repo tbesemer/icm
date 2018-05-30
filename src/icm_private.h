@@ -86,6 +86,8 @@ void icmLockDispatch();
 void icmUnlockDispatch();
 void icmLockWorkspace();
 void icmUnlockWorkspace();
+void icmOsLockScheduler();
+void icmOsUnlockScheduler();
 
 /*  Semaphore Indexes, zero based, used by OSAL to store 
  *  semaphore objects in local structure.
